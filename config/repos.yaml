@@ -1,0 +1,81 @@
+# Archer repo configuration
+# Add a block under repos: for each repo Archer should manage.
+# No code changes needed to add a new repo.
+
+repos:
+  kri-ip:
+    slug: velo9-ai/KRI-IP
+    local_path: ~/Developer/velo9-dev/kri-ip
+    base_branch: main
+    display_name: KRI Capital Intelligence Platform
+
+    # Issues Archer will pick up for sweep and overnight builds
+    issue_filters:
+      labels:
+        - overnight/ready-bug
+        - overnight/ready-feature
+      title_patterns:
+        - "[codex review]"
+      exclude_labels:
+        - overnight/blocked
+        - wontfix
+
+    # Agent chain per job type.
+    # Each entry is a KRI agent name invoked in sequence via claude -p.
+    # chain.py passes a context.json between steps.
+    agent_chains:
+      sweep:   [pam, archie, tom, bob, tina, tom, cody]
+      build:   [pam, archie, tom, bob, tina, tom, cody]
+      review:  [tina, tom, cody]
+
+    schedules:
+      morning_sweep:
+        time: "06:30"
+        days: [Mon, Tue, Wed, Thu, Fri]
+      evening_plan:
+        time: "18:00"
+        days: [Sun, Mon, Tue, Wed, Thu]
+      overnight_build:
+        time: "23:30"
+        days: [Mon, Tue, Wed, Thu, Fri]
+      morning_summary:
+        time: "07:00"
+        days: [Mon, Tue, Wed, Thu, Fri]
+
+    limits:
+      max_issues_per_run: 5
+      issue_timeout_secs: 5400    # 90 min hard limit per issue
+      concurrent_issues: 1        # sequential (safe for single-machine Claude)
+
+    notifications:
+      provider: velocity           # velocity | telegram_direct
+      # velocity: delegates to ~/Developer/velo9-dev/velocity
+      # telegram_direct: uses ARCHER_TELEGRAM_BOT_TOKEN + ARCHER_TELEGRAM_CHAT_ID
+
+    # On-demand review (replaces manual Codex sessions)
+    review:
+      enabled: true
+      trigger_label: archer/review-requested   # labeling an issue triggers review
+      post_result_as_comment: true
+
+# Template for adding a new repo:
+#
+#   my-repo:
+#     slug: org/repo-name
+#     local_path: ~/Developer/path/to/repo
+#     base_branch: main
+#     issue_filters:
+#       labels: [bug, ready-for-archer]
+#     agent_chains:
+#       sweep:  [bob, tom, cody]
+#       build:  [bob, tom, cody]
+#       review: [tom, cody]
+#     schedules:
+#       overnight_build:
+#         time: "23:00"
+#         days: [Mon, Tue, Wed, Thu, Fri]
+#     limits:
+#       max_issues_per_run: 3
+#       issue_timeout_secs: 3600
+#     notifications:
+#       provider: velocity
