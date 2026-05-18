@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.velo9.archer</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/johnbuccola/Developer/velo9-dev/archer/.venv/bin/python</string>
+    <string>-m</string>
+    <string>uvicorn</string>
+    <string>src.app:app</string>
+    <string>--host</string>
+    <string>0.0.0.0</string>
+    <string>--port</string>
+    <string>8100</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/johnbuccola/Developer/velo9-dev/archer</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/johnbuccola/Library/Logs/velo9/archer.stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/johnbuccola/Library/Logs/velo9/archer.stderr.log</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+    <key>HOME</key>
+    <string>/Users/johnbuccola</string>
+  </dict>
+</dict>
+</plist>
